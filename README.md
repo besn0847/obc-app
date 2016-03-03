@@ -29,12 +29,10 @@ So something quite simple which should take no more than 5 to 10 minutes to set-
 	* Make sure there is no TLS enabled on the Docker host
 
 If you use docker-machine, the Docker VM will look like this :
-*
 
 		docker-machine create --driver virtualbox --engine-opt host=tcp://0.0.0.0:4243 --engine-env DOCKER_TLS=no --virtualbox-memory "2048" openblockchain
 
 And to point to the Docker host :
-*
 
 		set DOCKER_HOST=tcp://<your_local_docker_IP_addr>:4243
 
