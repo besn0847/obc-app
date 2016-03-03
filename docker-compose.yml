@@ -1,0 +1,57 @@
+vp0:
+  image: besn0847/openchain-peer
+  container_name: vp0
+  hostname: vp0
+  environment:
+    - OPENCHAIN_PEER_ID=vp0
+    - OPENCHAIN_PEER_ADDRESSAUTODETECT=true
+    - OPENCHAIN_VM_ENDPOINT=http://172.17.0.1:4243
+    - OPENCHAIN_PEER_VALIDATOR_CONSENSUS=obcpbft
+  command: obc-peer peer
+
+vp1:
+  image: besn0847/openchain-peer
+  container_name: vp1
+  hostname: vp1
+  extends:
+    service: vp0
+  environment:
+    - OPENCHAIN_PEER_ID=vp1
+    - OPENCHAIN_PEER_DISCOVERY_ROOTNODE=vp0:30303
+  links:
+    - vp0
+
+vp2:
+  image: besn0847/openchain-peer
+  container_name: vp2
+  hostname: vp2
+  extends:
+    service: vp0
+  environment:
+    - OPENCHAIN_PEER_ID=vp2
+    - OPENCHAIN_PEER_DISCOVERY_ROOTNODE=vp0:30303
+  links:
+    - vp0
+
+vp3:
+  image: besn0847/openchain-peer
+  container_name: vp3
+  hostname: vp3
+  extends:
+    service: vp0
+  environment:
+    - OPENCHAIN_PEER_ID=vp3
+    - OPENCHAIN_PEER_DISCOVERY_ROOTNODE=vp0:30303
+  links:
+    - vp0
+
+cli:
+  image: besn0847/openchain-peer
+  container_name: cli
+  hostname: cli
+  command: "/bin/sh -c 'while(true); do sleep 60; done'"
+  environment:
+    - OPENCHAIN_PEER_ID=cli
+    - OPENCHAIN_PEER_ADDRESS=vp0:30303
+  links:
+    - vp0
